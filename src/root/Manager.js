@@ -25,7 +25,7 @@ const Manager = () => {
     
     return(
         manager.map((manager) => (
-            <div key={manager.id} className="card p-2 my-1" draggable>
+            <div key={manager.id} className="card p-2 my-1" draggable style={{maxWidth:292+"px"}}>
                 <p className="mb-2 h6">Name: {manager.name}</p>
                 <p className="m-0 h6 small text-secondary">Designation: {manager.designation}</p>
                 <p className="m-0 h6 small text-secondary">Team: {manager.team}</p>

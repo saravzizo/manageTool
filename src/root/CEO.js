@@ -25,7 +25,7 @@ const CEO = () => {
 
 
         ceo.map((ceo) => (
-            <div key={ceo.id} className="card p-2 my-1" draggable>
+            <div key={ceo.id} className="card p-2 my-1" draggable style={{maxWidth:292+"px"}}>
                 <p className="mb-2 h6">Name: {ceo.name}</p>
                 <p className="m-0 h6 small text-secondary">Designation: {ceo.designation}</p>
                 <p className="m-0 h6 small text-secondary">Team: {ceo.team}</p>
