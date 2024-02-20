@@ -1,5 +1,5 @@
 import Landing from "./root/Landing";
-import Tree from "./root/Tree";
+import Tree from "./root/Tree/Tree";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 function App() {

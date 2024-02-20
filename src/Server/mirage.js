@@ -54,6 +54,9 @@ export function makeServer() {
 
             let res =[]
             res = schema.db.employees;
+            if(res.length === 0){
+                return {message: "No employees found"};
+            }
             return res;
         });
         
@@ -84,10 +87,7 @@ export function makeServer() {
 
         // patch request for updating employee
 
-        server.patch("/employees/:id", (schema, request) => {
-            let id = request.params.id;
 
-        });
 
 
     return server;
