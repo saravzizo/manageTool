@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import GetManagerID from '../GetManagerID';
+import FuzzySearch from 'fuzzy-search';
 
 const LeftPanel = () => {
 
@@ -22,6 +23,11 @@ const LeftPanel = () => {
 
     error && console.log(error);
 
+    const [searchResult, setSearchResult] = useState('');
+    console.log(searchResult);
+    const fuzzy = new FuzzySearch(res, ['name', 'team']);
+
+
     return (
         <div className='col-3 bg-dark' >
             <div className='mx-3 mt-3'>
@@ -30,13 +36,29 @@ const LeftPanel = () => {
             <div className="card m-3 " style={{ height: "auto", maxHeight: 90 + "vh" }}>
                 <div className="card-header">
                     <form>
-                        <input className='form-control form-control-sm' type='text' placeholder='search here'   />
+                        <input className='form-control form-control-sm' type='text' placeholder='search by name or team...'  
+                        value={searchResult}
+                        onChange={(e) => setSearchResult(e.target.value)}
+                         />
                     </form>
                 </div>
                 <div className="card-body m-0" style={{ overflow: "scroll" }}>
                     <ul className="m-0 p-0" >
                         <li className="list-unstyled">
-                                {res.map((res) => (
+
+                                {
+                                searchResult?
+                                fuzzy.search(searchResult).map((res) => (
+                                    <div key={res.id} id={res.id} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
+                                    >
+                                        <p className="mb-2 h6">Name: {res.name}</p>
+                                        <p className="m-0 h6 small text-secondary">Designation: {res.designation}</p>
+                                        <p className="m-0 h6 small text-secondary">Team: {res.team}</p>
+                                        <p className="m-0 h6 small text-secondary">Reporting to: <GetManagerID managerId={res.manager} /></p>
+                                    </div>
+                                ))
+                                :
+                                res.map((res) => (
                                         <div key={res.id} id={res.id} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
                                         >
                                             <p className="mb-2 h6">Name: {res.name}</p>
@@ -45,6 +67,7 @@ const LeftPanel = () => {
                                             <p className="m-0 h6 small text-secondary">Reporting to: <GetManagerID managerId={res.manager} /></p>
                                         </div>
                                 ))}
+
                         </li>
                     </ul>
 
