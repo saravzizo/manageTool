@@ -55,6 +55,31 @@ function Tree() {
     setSearchResult('');
   }
 
+    const handleNameChangeApi = (e) => {
+
+        let element = e.target;
+        element.setAttribute('contenteditable', 'true');
+        element.focus();
+        element.onblur = function() {
+            
+            let id = e.target.id;
+
+            const patchData = async () => {
+                try {
+                    const response = await fetch(`/api/employees/${id}`, {
+                        method: 'Patch',
+                        body: JSON.stringify({ name: e.target.innerText })
+                    });
+                    const json = await response.json();
+                    console.log(json);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            patchData();
+          };
+    }
+
 
   return (
 
@@ -83,7 +108,11 @@ function Tree() {
                                     <div key={res.id} id={res.id} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
                                     onDragStart={drag}
                                     >
-                                        <p className="mb-2 h6">Name: {res.name}</p>
+                                        <div className='d-flex felx-row align-items-center'>
+                                        <label>Name:</label>
+                                        <p id={res.id} className="m-0 h6" onDoubleClick={handleNameChangeApi}> {res.name}</p>
+                                        </div>
+                                        
                                         <p className="m-0 h6 small text-secondary">Designation: {res.designation}</p>
                                         <p className="m-0 h6 small text-secondary">Team: {res.team}</p>
                                         <p className="m-0 h6 small text-secondary">Reporting to: <GetManagerID managerId={res.manager} /></p>
@@ -97,7 +126,10 @@ function Tree() {
                                         <div key={res.id} id={res.id} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
                                         onDragStart={drag}
                                         >
-                                            <p className="mb-2 h6">Name: {res.name}</p>
+                                            <div className='d-flex felx-row align-items-center'>
+                                                <label>Name:</label>
+                                                <p id={res.id} className="m-0 h6" onDoubleClick={handleNameChangeApi}> {res.name}</p>
+                                            </div>
                                             <p className="m-0 h6 small text-secondary">Designation: {res.designation}</p>
                                             <p className="m-0 h6 small text-secondary">Team: {res.team}</p>
                                             <p className="m-0 h6 small text-secondary">Reporting to: <GetManagerID managerId={res.manager} /></p>
