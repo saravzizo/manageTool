@@ -58,8 +58,8 @@ function Tree() {
 
   return (
 
-    <div className='d-flex flex-row' style={{ height: 100 + "%" }}>
-        <div className='col-3 bg-dark' >
+    <div  className='d-flex flex-row' style={{ height: 100 + "%" }}>
+        <div id="myPaletteDiv" className='col-3 bg-dark' >
             <div className='mx-3 mt-3'>
                 <p className='text-white h5'>Organizer</p>
             </div>
