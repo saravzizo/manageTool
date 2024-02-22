@@ -48,27 +48,6 @@ const Landing = () => {
                 "undoManager.isEnabled": true
             });
 
-        myDiagram.nodeTemplate =
-            $(go.Node, "Auto",
-                $(go.Panel, "Vertical",
-                    $(go.TextBlock,
-                        { margin: 2, stroke: "black", font: "bold 16px sans-serif" },
-                        new go.Binding("text", "name")),
-                    $(go.TextBlock,
-                        { margin: 2, stroke: "black" },
-                        new go.Binding("text", "designation")),
-                    $(go.TextBlock,
-                        { margin: 2, stroke: "black" },
-                        new go.Binding("text", "team")),
-                    $(go.TextBlock,
-                        { margin: 2, stroke: "black" },
-                        new go.Binding("text", "reportingTo"))
-                ),
-                $(go.Shape, "Rectangle",
-                    { fill: "transparent", stroke: "white", strokeWidth: 2 },
-                    new go.Binding("fill", "color"))
-            );
-        myDiagram.layout = $(go.TreeLayout, { angle: 90, layerSpacing: 35 });
 
 
 
@@ -84,23 +63,6 @@ const Landing = () => {
             }
         });
 
-
-        const levelColors = ["#AC193D", "#2672EC", "#8C0095", "#5133AB",
-            "#008299", "#D24726", "#008A00", "#094AB2"];
-
-        myDiagram.layout.commitNodes = function () {
-            go.TreeLayout.prototype.commitNodes.call(this);
-            myDiagram.layout.network.vertexes.each(v => {
-                if (v.node) {
-                    const level = v.level % (levelColors.length);
-                    const color = levelColors[level];
-                    const shape = v.node.findObject("SHAPE");
-                    if (shape) shape.stroke = $(go.Brush, "Linear", { 0: color, 1: go.Brush.lightenBy(color, 0.05), start: go.Spot.Left, end: go.Spot.Right });
-                }
-            });
-        };
-
-
         function mayWorkFor(node1, node2) {
             if (!(node1 instanceof go.Node)) return false;  // must be a Node
             if (node1 === node2) return false;  // cannot work for yourself
@@ -109,7 +71,7 @@ const Landing = () => {
         }
 
         function textStyle() {
-            return { font: "9pt  Segoe UI,sans-serif", stroke: "white" };
+            return { font: "9pt  Segoe UI,sans-serif", stroke: "black" };
         }
 
         function findHeadShot(pic) {
@@ -176,16 +138,9 @@ const Landing = () => {
                 $(go.Panel, "Auto",
                     { name: "BODY" },
                     $(go.Shape, "Rectangle",
-                        { name: "SHAPE", fill: "#333333", stroke: 'white', strokeWidth: 3.5, portId: "" }),
+                        { name: "SHAPE", fill: "white", stroke: 'white', strokeWidth: 3.5, portId: "" }),
                     $(go.Panel, "Horizontal",
-                        $(go.Picture,
-                            {
-                                name: "Picture",
-                                desiredSize: new go.Size(70, 70),
-                                margin: 1.5,
-                                source: "images/HSnopic.png"
-                            },
-                            new go.Binding("source", "pic", findHeadShot)),
+                    
 
                         $(go.Panel, "Table",
                             {
