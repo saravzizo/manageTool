@@ -49,8 +49,6 @@ const Landing = () => {
         fetch('api/employees')
             .then(response => response.json())
             .then(data => {
-
-                console.log(data);
                 model.nodeDataArray = data;
             })
             .catch(error => console.error('Error:', error));
