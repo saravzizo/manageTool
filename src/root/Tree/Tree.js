@@ -8,7 +8,6 @@ import { elementRoles } from 'aria-query';
 
 function Tree() {
 
-
     // employee data from api
     const [res, setRes] = useState([])
     const [error, setError] = useState(null);
@@ -146,7 +145,7 @@ function Tree() {
 
                                                     <div className='d-flex felx-row align-items-baseline text-secondary'>
                                                         <label className='small'>Reporting to: </label>
-                                                        <p id={res.id} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.manager}</p>
+                                                        <p id={res.id} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
                                                     </div>
 
                                                 </div>
@@ -177,7 +176,7 @@ function Tree() {
 
                                                     <div className='d-flex felx-row align-items-baseline text-secondary'>
                                                         <label className='small'>Reporting to: </label>
-                                                        <p id={res.id} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.manager}</p>
+                                                        <p id={res.id} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
                                                     </div>
 
                                                 </div>

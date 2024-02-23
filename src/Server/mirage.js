@@ -13,39 +13,42 @@ export function makeServer() {
 
         server.db.loadData({
             employees: [
-                { id: 1, name: "John Doe", designation: "CEO", team: "not applicable", manager:"-1" },
-                { id: 2, name: "Mark Hill", designation: "Manager", team: "Development", manager:"1" },
-                { id: 3, name: "Joe Smith", designation: "Manager", team: "Testing", manager:"1" },
-                { id: 4, name: "Jane Doe", designation: "Developer", team: "Development", manager:"2" },
-                { id: 5, name: "John Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 6, name: "Mark Doe", designation: "Tester", team: "Testing", manager:"3" },
-                { id: 7, name: "Jane Smith", designation: "Tester", team: "Testing", manager:"3" },
-                { id: 8, name: "John Hill", designation: "Tester", team: "Testing", manager:"3"},
-                { id: 9, name: "Mark Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 10, name: "Jane Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 11, name: "John Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 12, name: "Mark Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 13, name: "Jane Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 14, name: "John Hill", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 15, name: "Mark Smith", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 16, name: "Jane Hill", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 17, name: "John Smith", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 18, name: "Mark Doe", designation: "Developer", team: "Development", manager:"2" },
-                { id: 19, name: "Jane Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 20, name: "John Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 21, name: "Mark Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 22, name: "Jane Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 23, name: "John Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 24, name: "Mark Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 25, name: "Jane Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 26, name: "John Hill", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 27, name: "Mark Smith", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 28, name: "Jane Hill", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 29, name: "John Smith", designation: "Tester", team: "Testing", manager:"1" },
-                { id: 30, name: "Mark Doe", designation: "Developer", team: "Development", manager:"2" },
-                { id: 31, name: "Jane Smith", designation: "Developer", team: "Development", manager:"2" },
-                { id: 32, name: "John Hill", designation: "Developer", team: "Development", manager:"2" },
-                { id: 33, name: "Mark Smith", designation: "Developer", team: "Development",manager:"2" },
+                { key: 1, name: "John Doe", designation: "CEO", team: "not applicable", parent:"0" },
+                { key: 2, name: "Mark Hill", designation: "Manager", team: "Development", parent:"1" },
+                { key: 3, name: "Joe Smith", designation: "Manager", team: "Testing", parent:"1" },
+
+                { key: 4, name: "Kenny Rogers", designation: "Senior Developer", team: "Development", parent:"2" },
+                { key: 5, name: "John Bon Jovi", designation: "Senior Developer", team: "Development", parent:"2" },
+                { key: 6, name: "Steven Tyler", designation: "Senior Developer", team: "Development", parent:"2" },
+
+                { key: 7, name: "Mick Jagger", designation: "Junior Developer", team: "Development", parent:"4" },
+                { key: 8, name: "Robert Plant", designation: "Junior Developer", team: "Development", parent:"5" },
+                { key: 9, name: "Axl Rose", designation: "Junior Developer", team: "Development", parent:"5" },
+                { key: 10, name: "Freddie Mercury", designation: "Junior Developer", team: "Development", parent:"6" },
+                { key: 11, name: "David Bowie", designation: "Junior Developer", team: "Development", parent:"6" },
+
+                { key: 16, name: "Syd Barrett", designation: "Fresher Developer", team: "Development", parent:"7" },
+                { key: 17, name: "Roger Waters", designation: "Fresher Developer", team: "Development", parent:"7" },
+                { key: 18, name: "David Gilmour", designation: "Fresher Developer", team: "Development", parent:"8" },
+                { key: 19, name: "Nick Mason", designation: "Fresher Developer", team: "Development", parent:"8" },
+
+                { key: 20, name: "Richard Wright", designation: "Intern Developer", team: "Development", parent:"10" },
+                { key: 21, name: "Syd Barrett", designation: "Intern Developer", team: "Development", parent:"10" },
+                { key: 22, name: "Roger Waters", designation: "Intern Developer", team: "Development", parent:"10" },
+                { key: 23, name: "David Gilmour", designation: "Intern Developer", team: "Development", parent:"19" },
+
+                { key: 24, name: "Nick Mason", designation: "Senior Tester", team: "Testing", parent:"3" },
+                { key: 25, name: "Richard Wright", designation: "Senior Tester", team: "Testing", parent:"3" },
+
+                { key: 26, name: "Syd Barrett", designation: "Junior Tester", team: "Testing", parent:"24" },
+                { key: 27, name: "Roger Waters", designation: "Junior Tester", team: "Testing", parent:"24" },
+                { key: 28, name: "David Gilmour", designation: "Junior Tester", team: "Testing", parent:"25" },
+
+                { key: 29, name: "Nick Mason", designation: "Intern Tester", team: "Testing", parent:"26" },
+                { key: 30, name: "Richard Wright", designation: "Intern Tester", team: "Testing", parent:"28" },
+
+
+             
             ]
         });
 
