@@ -10,91 +10,53 @@ const Landing = () => {
                 initialContentAlignment: go.Spot.Center,
                 layout: $(go.TreeLayout),
                 "undoManager.isEnabled": true,
-
-
                 allowCopy: false,
                 allowDelete: false,
-
                 maxSelectionCount: 1,
                 validCycle: go.Diagram.CycleDestinationTree,
                 "clickCreatingTool.archetypeNodeData": {
                     name: "(new person)",
-                    title: "",
-                    comments: ""
-                },
-                "clickCreatingTool.insertPart": function (loc) {  // method override must be function, not =>
-                    const node = go.ClickCreatingTool.prototype.insertPart.call(this, loc);
-                    if (node !== null) {
-                        this.diagram.select(node);
-                        this.diagram.commandHandler.scrollToPart(node);
-                        this.diagram.commandHandler.editTextBlock(node.findObject("NAMETB"));
-                    }
-                    return node;
+                    Reporting: ""
                 },
                 layout:
                     $(go.TreeLayout,
                         {
                             treeStyle: go.TreeLayout.StyleLastParents,
                             arrangement: go.TreeLayout.ArrangementHorizontal,
-                            // properties for most of the tree:
                             angle: 90,
                             layerSpacing: 35,
-                            // properties for the "last parents":
                             alternateAngle: 90,
                             alternateLayerSpacing: 35,
                             alternateAlignment: go.TreeLayout.AlignmentBus,
                             alternateNodeSpacing: 20
                         }),
-                "undoManager.isEnabled": true
             });
 
-
-
-
-
-        myDiagram.addDiagramListener("Modified", e => {
-            const button = document.getElementById("SaveButton");
-            if (button) button.disabled = !myDiagram.isModified;
-            const idx = document.title.indexOf("*");
-            if (myDiagram.isModified) {
-                if (idx < 0) document.title += "*";
-            } else {
-                if (idx >= 0) document.title = document.title.slice(0, idx);
-            }
-        });
-
         function mayWorkFor(node1, node2) {
-            if (!(node1 instanceof go.Node)) return false;  // must be a Node
-            if (node1 === node2) return false;  // cannot work for yourself
-            if (node2.isInTreeOf(node1)) return false;  // cannot work for someone who works for you
+            if (!(node1 instanceof go.Node)) return false;
+            if (node1 === node2) return false;
+            if (node2.isInTreeOf(node1)) return false;
             return true;
         }
 
         function textStyle() {
-            return { font: "9pt  Segoe UI,sans-serif", stroke: "black" };
+            return { font: "10pt  Segoe UI,sans-serif", stroke: "black" , textAlign: "center",margin: 5
+        };
         }
-
-        function findHeadShot(pic) {
-            if (!pic) return "images/HSnopic.png";
-            return "images/HS" + pic;
-        }
-
-
-
-
 
 
         let model = $(go.TreeModel);
-        model.nodeDataArray =
-            [
-                { key: "ceo", name: "ceo", designation: "1", team: "Team 1", reportingTo: "" },
-                { key: "Manager", name: "Manager", parent: "ceo", designation: "1", team: "Team 1", reportingTo: "" },
+        fetch('api/employees')
+            .then(response => response.json())
+            .then(data => {
 
-                { key: "Employee 1", parent: "Manager", name: "Employee 1", designation: "2", team: "Team 1", reportingTo: "Manager" },
-                { key: "Employee 1", parent: "Manager", name: "Employee 2", designation: "2", team: "Team 1", reportingTo: "Manager" },
+                console.log(data);
+                model.nodeDataArray = data;
+            })
+            .catch(error => console.error('Error:', error));
 
-            ];
         myDiagram.model = model;
+
 
 
         myDiagram.nodeTemplate =
@@ -140,47 +102,48 @@ const Landing = () => {
                     $(go.Shape, "Rectangle",
                         { name: "SHAPE", fill: "white", stroke: 'white', strokeWidth: 3.5, portId: "" }),
                     $(go.Panel, "Horizontal",
-                    
+
 
                         $(go.Panel, "Table",
                             {
-                                minSize: new go.Size(130, NaN),
-                                maxSize: new go.Size(150, NaN),
-                                margin: new go.Margin(6, 10, 0, 6),
+                                minSize: new go.Size(180, NaN),
+                                maxSize: new go.Size(180, NaN),
+                                margin: new go.Margin(0, 10, 0, 0),
                                 defaultAlignment: go.Spot.Left
                             },
-                            $(go.RowColumnDefinition, { column: 2, width: 4 }),
-                            $(go.TextBlock, textStyle(),  // the name
-                                {
-                                    name: "NAMETB",
-                                    row: 0, column: 0, columnSpan: 5,
-                                    font: "12pt Segoe UI,sans-serif",
-                                    editable: true, isMultiline: false,
-                                    minSize: new go.Size(50, 16)
-                                },
-                                new go.Binding("text", "name").makeTwoWay()),
-                            $(go.TextBlock, "Title: ", textStyle(),
-                                { row: 1, column: 0 }),
+                            $(go.RowColumnDefinition, { column: 2, width: 6 }),
+
                             $(go.TextBlock, textStyle(),
-                                {
-                                    row: 1, column: 1, columnSpan: 4,
-                                    editable: true, isMultiline: false,
-                                    minSize: new go.Size(50, 14),
-                                    margin: new go.Margin(0, 0, 0, 3)
-                                },
-                                new go.Binding("text", "title").makeTwoWay()),
+                                new go.Binding("text", "name").makeTwoWay(),
+                                {font: "bold 12pt Segoe UI,sans-serif"}
+                            ),
+
                             $(go.TextBlock, textStyle(),
-                                { row: 2, column: 0 },
-                                new go.Binding("text", "key", v => "ID: " + v)),
+                                new go.Binding("text", "key").makeTwoWay(),
+                                { row: 0, column: 1 }
+                            ),
+
+
+
                             $(go.TextBlock, textStyle(),
-                                {
-                                    row: 3, column: 0, columnSpan: 5,
-                                    font: "italic 9pt sans-serif",
-                                    wrap: go.TextBlock.WrapFit,
-                                    editable: true,
-                                    minSize: new go.Size(100, 14)
-                                },
-                                new go.Binding("text", "comments").makeTwoWay())
+                                new go.Binding("text", "designation").makeTwoWay(),
+                                { row: 1, column: 0 }
+                            ),
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "team").makeTwoWay(),
+                                { row: 2, column: 0 }
+                            ),
+
+                            $(go.TextBlock, "Reporting to: ", textStyle(),
+                                {row: 3, column: 0 }
+                            ),
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "parent").makeTwoWay(),
+                                { row: 3, column: 1 }
+                            ),       
+
                         )
                     )
                 ),
@@ -210,72 +173,13 @@ const Landing = () => {
             if (!node) return;
             const thisemp = node.data;
             myDiagram.startTransaction("add employee");
-            const newemp = { name: "(new person)", title: "(title)", comments: "", parent: thisemp.key };
+            const newemp = { name: "(new person)", title: "(title)", comments: "", parent: thisemp.id };
             myDiagram.model.addNodeData(newemp);
             const newnode = myDiagram.findNodeForData(newemp);
             if (newnode) newnode.location = node.location;
             myDiagram.commitTransaction("add employee");
             myDiagram.commandHandler.scrollToPart(newnode);
         }
-
-
-        myDiagram.nodeTemplate.contextMenu =
-            $("ContextMenu",
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Add Employee"),
-                    {
-                        click: (e, button) => addEmployee(button.part.adornedPart)
-                    }
-                ),
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Vacate Position"),
-                    {
-                        click: (e, button) => {
-                            const node = button.part.adornedPart;
-                            if (node !== null) {
-                                const thisemp = node.data;
-                                myDiagram.startTransaction("vacate");
-                                myDiagram.model.setDataProperty(thisemp, "name", "(Vacant)");
-                                myDiagram.model.setDataProperty(thisemp, "pic", "");
-                                myDiagram.model.setDataProperty(thisemp, "comments", "");
-                                myDiagram.commitTransaction("vacate");
-                            }
-                        }
-                    }
-                ),
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Remove Role"),
-                    {
-                        click: (e, button) => {
-                            const node = button.part.adornedPart;
-                            if (node !== null) {
-                                myDiagram.startTransaction("reparent remove");
-                                const chl = node.findTreeChildrenNodes();
-                                while (chl.next()) {
-                                    const emp = chl.value;
-                                    myDiagram.model.setParentKeyForNodeData(emp.data, node.findTreeParentNode().data.key);
-                                }
-                                myDiagram.model.removeNodeData(node.data);
-                                myDiagram.commitTransaction("reparent remove");
-                            }
-                        }
-                    }
-                ),
-                $("ContextMenuButton",
-                    $(go.TextBlock, "Remove Department"),
-                    {
-                        click: (e, button) => {
-                            const node = button.part.adornedPart;
-                            if (node !== null) {
-                                myDiagram.startTransaction("remove dept");
-                                myDiagram.removeParts(node.findTreeParts());
-                                myDiagram.commitTransaction("remove dept");
-                            }
-                        }
-                    }
-                )
-            );
-
 
         myDiagram.linkTemplate =
             $(go.Link, go.Link.Orthogonal,
@@ -286,10 +190,9 @@ const Landing = () => {
 
 
     return (
-        <div>
-            <div id="myDiagramDiv" style={{ width: "100%", height: "600px" }}></div>
-        </div>
-
+            // <div id="myDiagramDiv" style={{ width: "100%", height: "600px" }}></div>
+            <></>
+            
     );
 };
 
