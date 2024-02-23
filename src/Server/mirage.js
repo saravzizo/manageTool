@@ -87,15 +87,13 @@ export function makeServer() {
 
         // patch request for updating employee
 
-        server.patch("/employees/:id", (schema, request) => {
+        server.put("/employees/:id", (schema, request) => {
             let id = request.params.id;
             let attrs = JSON.parse(request.requestBody);
-            let employee = schema.db.employees.find(id);
-            employee.name = attrs.name;
-            employee.designation = attrs.designation;
-            employee.team = attrs.team;
-            employee.manager = attrs.manager;
-            return employee;
+            console.log(attrs);
+            let res = schema.db.employees.update(id, attrs);
+
+            return res;
 
         }
         );

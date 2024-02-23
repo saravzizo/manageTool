@@ -12,8 +12,6 @@ const RightPanel = ({ allow, drop }) => {
             onDrop={drop}
             onDragOver={allow}
             >  
-            
-
             </div>
         </div>
     );
