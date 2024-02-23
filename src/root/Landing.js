@@ -282,24 +282,6 @@ const Landing = () => {
                 { layerName: "Background", corner: 5 },
                 $(go.Shape, { strokeWidth: 1.5, stroke: "#F5F5F5" }));
 
-
-        let myPalette = $(go.Palette, "myPaletteDiv");
-        myPalette.nodeTemplate =
-            $(go.Node, "Auto",
-                $(go.Shape, "Rectangle",
-                    { fill: "white", stroke: null },
-                    new go.Binding("fill", "color")),
-                $(go.TextBlock,
-                    { margin: 8 },
-                    new go.Binding("text", "key"))
-            );
-
-        myPalette.model = new go.GraphLinksModel([
-            { key: "Alpha", color: "lightblue" },
-            { key: "Beta", color: "orange" },
-            // ...other nodes...
-        ]);
-
     }, []);
 
 
