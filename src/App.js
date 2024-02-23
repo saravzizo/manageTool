@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
           <Route path="/tree" element={<Tree />} />
         </Routes>
       </BrowserRouter>
