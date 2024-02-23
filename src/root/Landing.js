@@ -171,7 +171,7 @@ const Landing = () => {
             if (!node) return;
             const thisemp = node.data;
             myDiagram.startTransaction("add employee");
-            const newemp = { name: "(new person)", title: "(title)", comments: "", parent: thisemp.id };
+            const newemp = { name: "(new person)", parent: thisemp.id };
             myDiagram.model.addNodeData(newemp);
             const newnode = myDiagram.findNodeForData(newemp);
             if (newnode) newnode.location = node.location;
@@ -181,16 +181,14 @@ const Landing = () => {
 
         myDiagram.linkTemplate =
             $(go.Link, go.Link.Orthogonal,
-                { layerName: "Background", corner: 5 },
-                $(go.Shape, { strokeWidth: 1.5, stroke: "#F5F5F5" }));
+                { layerName: "Background", corner: 10 },
+                $(go.Shape, { strokeWidth: 1.5, stroke: "#ffffff" }));
 
     }, []);
 
 
     return (
-            // <div id="myDiagramDiv" style={{ width: "100%", height: "600px" }}></div>
             <></>
-            
     );
 };
 
