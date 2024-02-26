@@ -1,10 +1,8 @@
 
 import RightPanel from './RightPanel';
 import React, { useEffect, useState } from 'react';
-import GetManagerID from '../GetManagerID';
 import FuzzySearch from 'fuzzy-search';
 import Draggable from 'react-draggable';
-import { elementRoles } from 'aria-query';
 
 function Tree() {
 
@@ -41,7 +39,7 @@ function Tree() {
         let id = ev.target.id;
         setId(id);
         ev.dataTransfer.setData("text", id);
-        let data = res.filter((res) => res.id == id);
+        let data = res.filter((res) => res.id === id);
     }
 
     function allowDrop(ev) {
