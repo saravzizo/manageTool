@@ -1,7 +1,5 @@
 
 import React from 'react';
-import Draggable from 'react-draggable';
-import { useState } from 'react';
 import Landing from '../Landing';
 
 const RightPanel = ({ allow, drop }) => {

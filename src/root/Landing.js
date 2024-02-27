@@ -8,7 +8,6 @@ const Landing = () => {
         let myDiagram = $(go.Diagram, "myDiagramDiv",
             {
                 initialContentAlignment: go.Spot.Center,
-                layout: $(go.TreeLayout),
                 "undoManager.isEnabled": true,
                 allowCopy: false,
                 allowDelete: false,
