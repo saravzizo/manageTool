@@ -35,25 +35,14 @@ function Tree() {
 
     // drag and drop
     const [id, setId] = useState('');
+
     const drag = (ev) => {
         let id = ev.target.id;
         setId(id);
         ev.dataTransfer.setData("text", id);
-        let data = res.filter((res) => res.id === id);
     }
 
-    function allowDrop(ev) {
-        ev.preventDefault();
 
-    }
-
-    function Drop(ev) {
-        let id1 = id
-        ev.target.appendChild(document.getElementById(id1));
-        document.getElementById(id1).removeAttribute('draggable');
-        ev.preventDefault();
-        setSearchResult('');
-    }
 
 
     //api for patch requests
@@ -105,7 +94,7 @@ function Tree() {
                 <div className='mx-3 mt-3'>
                     <p className='text-white h5'>Organizer</p>
                 </div>
-                <div className="card m-3 " style={{ height: "auto", maxHeight: 90 + "vh" }}>
+                <div className="card m-3 " style={{ height: 90 + "vh", maxHeight: 90 + "vh" }}>
                     <div className="card-header">
                         <form>
                             <input className='form-control form-control-sm' type='text' placeholder='search by name or team...'
@@ -116,69 +105,69 @@ function Tree() {
                     </div>
                     <div className="card-body m-0" style={{ overflow: "scroll" }}>
                         <ul className="m-0 p-0" >
-                            <li className="list-unstyled">
+                            <li className="list-unstyled" id="dragcard" >
 
                                 {
                                     searchResult ?
                                         fuzzy.search(searchResult).map((res) => (
-                                            <Draggable key= {res.key}>
-                                                <div key= {res.key} id= {res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
-                                                    onDragStart={drag}
-                                                >
-                                                    <div className='d-flex felx-row align-items-baseline '>
-                                                        <label className='h6'>Name: </label>
-                                                        <p id={res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
-                                                        <span className='flex-grow-1'></span>
-                                                        <p className='m-0 small text-secondary'>Id: {res.key}</p>
-                                                    </div>
 
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Designation: </label>
-                                                        <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
-                                                    </div>
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Team: </label>
-                                                        <p id= {res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
-                                                    </div>
-
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Reporting to: </label>
-                                                        <p id= {res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
-                                                    </div>
-
+                                            <div key={res.key} id={res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
+                                                onDragStart={drag}
+                                            >
+                                                <div className='d-flex felx-row align-items-baseline '>
+                                                    <label className='h6'>Name: </label>
+                                                    <p id={res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
+                                                    <span className='flex-grow-1'></span>
+                                                    <p className='m-0 small text-secondary'>Id: {res.key}</p>
                                                 </div>
-                                            </Draggable>
+
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Designation: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
+                                                </div>
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Team: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
+                                                </div>
+
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Reporting to: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
+                                                </div>
+
+                                            </div>
+
 
                                         ))
                                         :
                                         res.map((res) => (
-                                            <Draggable key= {res.key}>
-                                                <div key= {res.key} id= {res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
-                                                    onDragStart={drag}
-                                                >
-                                                    <div className='d-flex felx-row align-items-baseline '>
-                                                        <label className='h6'>Name: </label>
-                                                        <p id= {res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
-                                                        <span className='flex-grow-1'></span>
-                                                        <p className='m-0 small text-secondary'>Id: {res.key}</p>
-                                                    </div>
 
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Designation: </label>
-                                                        <p id= {res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
-                                                    </div>
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Team: </label>
-                                                        <p id= {res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
-                                                    </div>
-
-                                                    <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                        <label className='small'>Reporting to: </label>
-                                                        <p id= {res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
-                                                    </div>
-
+                                            <div key={res.key} id={res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
+                                                onDragStart={drag}
+                                            >
+                                                <div className='d-flex felx-row align-items-baseline '>
+                                                    <label className='h6'>Name: </label>
+                                                    <p id={res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
+                                                    <span className='flex-grow-1'></span>
+                                                    <p className='m-0 small text-secondary'>Id: {res.key}</p>
                                                 </div>
-                                            </Draggable>
+
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Designation: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
+                                                </div>
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Team: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
+                                                </div>
+
+                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
+                                                    <label className='small'>Reporting to: </label>
+                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
+                                                </div>
+
+                                            </div>
+
 
                                         ))}
                             </li>
@@ -188,7 +177,7 @@ function Tree() {
                 </div>
 
             </div>
-            <RightPanel allow={allowDrop} drop={Drop} />
+            <RightPanel id={id} />
         </div>
     );
 }
