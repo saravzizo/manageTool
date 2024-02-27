@@ -96,12 +96,17 @@ function Tree() {
                 </div>
                 <div className="card m-3 " style={{ height: 90 + "vh", maxHeight: 90 + "vh" }}>
                     <div className="card-header">
-                        <form>
+                        <form className='d-flex flex-row align-items-center'>
                             <input className='form-control form-control-sm' type='text' placeholder='search by name or team...'
                                 value={searchResult}
                                 onChange={(e) => setSearchResult(e.target.value)}
                             />
+                            <div data-bs-toggle="tooltip" data-bs-placement="top" title="Add new">
+                                <i className="fa fa-plus" style={{marginLeft:10+"px"}} ></i>
+                            </div>
+                            
                         </form>
+                        
                     </div>
                     <div className="card-body m-0" style={{ overflow: "scroll" }}>
                         <ul className="m-0 p-0" >
