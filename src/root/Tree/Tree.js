@@ -2,7 +2,7 @@
 import RightPanel from './RightPanel';
 import React, { useEffect, useState } from 'react';
 import FuzzySearch from 'fuzzy-search';
-import Draggable from 'react-draggable';
+import tippy from 'tippy.js';
 
 function Tree() {
 
@@ -41,8 +41,6 @@ function Tree() {
         setId(id);
         ev.dataTransfer.setData("text", id);
     }
-
-
 
 
     //api for patch requests
@@ -86,6 +84,44 @@ function Tree() {
         }
     }
 
+    tippy('[data-tippy-content]',
+        {
+            theme: 'light'
+        })
+
+    const handleAddNew = (e) => {
+        document.getElementById('dragcard').classList.add('d-none');
+        document.getElementById('formCard').classList.remove('d-none');
+        document.getElementById('formCard').classList.add('d-block');
+        e.preventDefault();
+    }
+
+
+
+    const [name, setName] = useState('');
+    const [designation, setDesignation] = useState('');
+    const [team, setTeam] = useState('');
+    const [parent, setParent] = useState('');
+
+
+    const addNew = async (e) => {
+        try {
+            const response = await fetch('/api/newEmployee', {
+                method: 'post',
+                body: JSON.stringify({
+                    name:name,
+                    designation: designation,
+                    team: team,
+                    parent: parent
+                }),
+            });
+            window.location.reload();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
 
     return (
 
@@ -97,16 +133,20 @@ function Tree() {
                 <div className="card m-3 " style={{ height: 90 + "vh", maxHeight: 90 + "vh" }}>
                     <div className="card-header">
                         <form className='d-flex flex-row align-items-center'>
-                            <input className='form-control form-control-sm' type='text' placeholder='search by name or team...'
+                            <input className='form-control form-control-sm border-dark' type='text' placeholder='search by name or team...'
                                 value={searchResult}
                                 onChange={(e) => setSearchResult(e.target.value)}
+                                style={{ boxShadow: "none" }}
                             />
-                            <div data-bs-toggle="tooltip" data-bs-placement="top" title="Add new">
-                                <i className="fa fa-plus" style={{marginLeft:10+"px"}} ></i>
-                            </div>
-                            
+                            <button data-tippy-content="Add New" className='btn btn-sm btn-outline-dark p-0 px-1' style={{ marginLeft: 10 + "px" }}
+                            onClick={handleAddNew}
+
+                            >
+                                <i className="fa fa-plus"  ></i>
+                            </button>
+
                         </form>
-                        
+
                     </div>
                     <div className="card-body m-0" style={{ overflow: "scroll" }}>
                         <ul className="m-0 p-0" >
@@ -175,6 +215,45 @@ function Tree() {
 
 
                                         ))}
+                            </li>   
+                            <li className="list-unstyled d-none" id="formCard">
+                                <div className="card p-2 my-2 " style={{ width: 290 + "px" }}>
+                                    <div className='d-flex felx-row align-items-baseline justify-content-between px-1'>
+                                        <label className='h6'>Name: </label>
+                                        <input className="form-control form-control-sm w-50 my-1" 
+                                        onChange={(e) => setName(e.target.value)}
+                                        value={name}
+                                        />
+                                    </div>
+
+                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
+                                        <label className='small'>Designation: </label>
+                                        <input className="form-control form-control-sm  w-50 my-1" 
+                                        onChange={(e) => setDesignation(e.target.value)}
+                                        value={designation}
+                                        />
+                                    </div>
+                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
+                                        <label className='small'>Team: </label>
+                                        <input className="form-control form-control-sm  w-50 my-1"
+                                        onChange={(e) => setTeam(e.target.value)}
+                                        value={team}
+                                        />
+                                    </div>
+
+                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
+                                        <label className='small'>Reporting to: </label>
+                                        <input className="form-control form-control-sm  w-50 my-1" type='number'
+                                        onChange={(e) => setParent(e.target.value)}
+                                        value={parent}
+                                        />
+                                    </div>
+
+                                    <div className='px-1'>
+                                        <button className='btn btn-sm btn-outline-dark p-0 px-1 mt-3' style={{float:"right"}} onClick={addNew}>Add</button>
+                                    </div>
+
+                                </div>
                             </li>
                         </ul>
 

@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { makeServer } from './Server/mirage';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import 'bootstrap/js/dist/toast';
-import 'bootstrap/js/dist/tooltip';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/js/bootstrap.min.js';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+
 
 
 
