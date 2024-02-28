@@ -1,269 +1,219 @@
+import React, { useEffect } from 'react';
+import go from 'gojs';
 
-import RightPanel from './RightPanel';
-import React, { useEffect, useState } from 'react';
-import FuzzySearch from 'fuzzy-search';
-import tippy from 'tippy.js';
-
-function Tree() {
-
-    // employee data from api
-    const [res, setRes] = useState([])
-    const [error, setError] = useState(null);
+const Tree = () => {
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('/api/employees');
-                const json = await response.json();
-                setRes(json);
-            } catch (error) {
-                setError(error);
-            }
-        };
-        fetchData();
-    }, []);
 
-    error && console.log(error);
-
-
-
-    // fuzzy search
-    const [searchResult, setSearchResult] = useState('');
-    const fuzzy = new FuzzySearch(res, ['name', 'team']);
-
-
-
-    // drag and drop
-    const [id, setId] = useState('');
-
-    const drag = (ev) => {
-        let id = ev.target.id;
-        setId(id);
-        ev.dataTransfer.setData("text", id);
-    }
-
-
-    //api for patch requests
-    const handleNameChangeApi = (e) => {
-
-        const patchName = async (id, str) => {
-            let key = str
-            try {
-                const response = await fetch(`/api/employees/${id}`, {
-                    method: 'put',
-                    body: JSON.stringify({
-                        [key]: e.target.innerText
-                    }),
-                });
-                const json = await response.json();
-                console.log(json);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        let element = e.target;
-        element.setAttribute('contenteditable', 'true');
-        element.focus();
-        element.onblur = function () {
-            let id = e.target.id;
-
-            if (element.className.includes('name')) {
-                patchName(id, "name");
-            }
-            else if (element.className.includes('designation')) {
-                patchName(id, "designation");
-            }
-            else if (element.className.includes('manager')) {
-                patchName(id, 'manager')
-            }
-            else if (element.className.includes('team')) {
-                patchName(id, 'team')
-            }
-            element.removeAttribute('contenteditable');
-        }
-    }
-
-    tippy('[data-tippy-content]',
-        {
-            theme: 'light'
-        })
-
-    const handleAddNew = (e) => {
-        document.getElementById('dragcard').classList.add('d-none');
-        document.getElementById('formCard').classList.remove('d-none');
-        document.getElementById('formCard').classList.add('d-block');
-        e.preventDefault();
-    }
-
-
-
-    const [name, setName] = useState('');
-    const [designation, setDesignation] = useState('');
-    const [team, setTeam] = useState('');
-    const [parent, setParent] = useState('');
-
-
-    const addNew = async (e) => {
-        try {
-            const response = await fetch('/api/newEmployee', {
-                method: 'post',
-                body: JSON.stringify({
-                    name:name,
-                    designation: designation,
-                    team: team,
-                    parent: parent
-                }),
+        let $ = go.GraphObject.make;
+        let myDiagram = $(go.Diagram, "myDiagramDiv",
+            {
+                initialContentAlignment: go.Spot.Center,
+                "undoManager.isEnabled": true,
+                allowCopy: false,
+                allowDelete: false,
+                maxSelectionCount: 1,
+                validCycle: go.Diagram.CycleDestinationTree,
+                "clickCreatingTool.archetypeNodeData": {
+                    name: "(new person)",
+                    Reporting: ""
+                },
+                layout:
+                    $(go.TreeLayout,
+                        {
+                            treeStyle: go.TreeLayout.StyleLastParents,
+                            arrangement: go.TreeLayout.ArrangementHorizontal,
+                            angle: 90,
+                            layerSpacing: 35,
+                            alternateAngle: 90,
+                            alternateLayerSpacing: 35,
+                            alternateAlignment: go.TreeLayout.AlignmentBus,
+                            alternateNodeSpacing: 20
+                        }),
             });
-            window.location.reload();
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
+        function mayWorkFor(node1, node2) {
+            if (!(node1 instanceof go.Node)) return false;
+            if (node1 === node2) return false;
+            if (node2.isInTreeOf(node1)) return false;
+            return true;
+        }
+
+        function textStyle() {
+            return {
+                font: "10pt  Segoe UI,sans-serif", stroke: "black", textAlign: "center", margin: 5
+            };
+        }
+
+
+
+        let res = [];
+
+        let model = $(go.TreeModel);
+
+        fetch('api/employees')
+            .then(response => response.json())
+            .then(data => {
+                res = data;
+            })
+            .catch(error => console.error('Error:', error));
+
+        myDiagram.model = model;
+
+
+
+        document.addEventListener("drop", function (event) {
+            var id = event.dataTransfer.getData("text");
+
+            res.filter((item) => {
+                if (item.id === id) {
+                    let newemp = { key: id, name: item.name, parent: item.parent, team: item.team, designation: item.designation };
+                    myDiagram.model.addNodeData(newemp);
+                }
+            });
+        });
+
+        myDiagram.nodeTemplate =
+            $(go.Node, "Spot",
+                {
+                    selectionObjectName: "BODY",
+                    mouseEnter: (e, node) => node.findObject("BUTTON").opacity = node.findObject("BUTTONX").opacity = 1,
+                    mouseLeave: (e, node) => node.findObject("BUTTON").opacity = node.findObject("BUTTONX").opacity = 0,
+                    mouseDragEnter: (e, node, prev) => {
+                        const diagram = node.diagram;
+                        const selnode = diagram.selection.first();
+                        if (!mayWorkFor(selnode, node)) return;
+                        const shape = node.findObject("SHAPE");
+                        if (shape) {
+                            shape._prevFill = shape.fill;
+                            shape.fill = "green";
+                        }
+                    },
+                    mouseDragLeave: (e, node, next) => {
+                        const shape = node.findObject("SHAPE");
+                        if (shape && shape._prevFill) {
+                            shape.fill = shape._prevFill;
+                        }
+                    },
+                    mouseDrop: (e, node) => {
+                        const diagram = node.diagram;
+                        const selnode = diagram.selection.first();
+                        if (mayWorkFor(selnode, node)) {
+                            const link = selnode.findTreeParentLink();
+                            if (link !== null) {
+                                link.fromNode = node;
+                            } else {
+                                diagram.toolManager.linkingTool.insertLink(node, node.port, selnode, selnode.port);
+                            }
+                        }
+                    }
+                },
+
+                new go.Binding("text", "name"),
+                new go.Binding("layerName", "isSelected", sel => sel ? "Foreground" : "").ofObject(),
+                $(go.Panel, "Auto",
+                    { name: "BODY" },
+                    $(go.Shape, "RoundedRectangle",
+                        { name: "SHAPE", fill: "white", stroke: 'white', strokeWidth: 5, portId: "" }),
+                    $(go.Panel, "Horizontal",
+
+
+                        $(go.Panel, "Table",
+                            {
+                                minSize: new go.Size(290, 113),
+                                maxSize: new go.Size(290, 113),
+                                margin: new go.Margin(0, 0, 0, 0),
+                                defaultAlignment: go.Spot.Left
+                            },
+                            $(go.RowColumnDefinition, { column: 2, width: 2 }),
+
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "name").makeTwoWay(),
+                                { font: "bold 12pt Segoe UI,sans-serif" }
+                            ),
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "key").makeTwoWay(),
+                                { row: 0, column: 3 }
+                            ),
+
+
+                            $(go.TextBlock, "Designation:", textStyle(),
+                            { row: 1, column: 0 }
+                            ),
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "designation").makeTwoWay(),
+                                { row: 1, column: 1 }
+                            ),
+
+
+                            $(go.TextBlock, "Team:", textStyle(),
+                            { row: 2, column: 0 }
+                            ),
+                            
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "team").makeTwoWay(),
+                                { row: 2, column: 1 }
+                            ),
+
+
+                            $(go.TextBlock, "Reporting to: ", textStyle(),
+                                { row: 3, column: 0 }
+                            ),
+
+                            $(go.TextBlock, textStyle(),
+                                new go.Binding("text", "parent").makeTwoWay(),
+                                { row: 3, column: 1 }
+                            ),
+
+                        )
+                    )
+                ),
+                $("Button",
+                    $(go.Shape, "PlusLine", { width: 10, height: 10 }),
+                    {
+                        name: "BUTTON", alignment: go.Spot.Right, opacity: 0,
+                        click: (e, button) => addEmployee(button.part)
+                    },
+
+                    new go.Binding("opacity", "isSelected", s => s ? 1 : 0).ofObject()
+                ),
+                new go.Binding("isTreeExpan`ded").makeTwoWay(),
+                $("TreeExpanderButton",
+                    {
+                        name: "BUTTONX", alignment: go.Spot.Bottom, opacity: 0,
+                        "_treeExpandedFigure": "TriangleUp",
+                        "_treeCollapsedFigure": "TriangleDown"
+                    },
+                    new go.Binding("opacity", "isSelected", s => s ? 1 : 0).ofObject()
+                )
+            );
+
+        function addEmployee(node) {
+            if (!node) return;
+            const thisemp = node.data;
+            myDiagram.startTransaction("add employee");
+            const newemp = { key: thisemp.id,  name: "(new person)", parent: thisemp.key, team: thisemp.team, designation: thisemp.designation };
+            myDiagram.model.addNodeData(newemp);
+            const newnode = myDiagram.findNodeForData(newemp);
+            if (newnode) newnode.location = node.location;
+            myDiagram.commitTransaction("add employee");
+            myDiagram.commandHandler.scrollToPart(newnode);
+        }
+
+        myDiagram.linkTemplate =
+            $(go.Link, go.Link.Orthogonal,
+                { layerName: "Background", corner: 10 },
+                $(go.Shape, { strokeWidth: 1.5, stroke: "#ffffff" }));
+
+    }, []);
 
 
     return (
-
-        <div className='d-flex flex-row' style={{ height: 100 + "%" }}>
-            <div className='col-3 bg-dark' >
-                <div className='mx-3 mt-3'>
-                    <p className='text-white h5'>Organizer</p>
-                </div>
-                <div className="card m-3 " style={{ height: 90 + "vh", maxHeight: 90 + "vh" }}>
-                    <div className="card-header">
-                        <form className='d-flex flex-row align-items-center'>
-                            <input className='form-control form-control-sm border-dark' type='text' placeholder='search by name or team...'
-                                value={searchResult}
-                                onChange={(e) => setSearchResult(e.target.value)}
-                                style={{ boxShadow: "none" }}
-                            />
-                            <button data-tippy-content="Add New" className='btn btn-sm btn-outline-dark p-0 px-1' style={{ marginLeft: 10 + "px" }}
-                            onClick={handleAddNew}
-
-                            >
-                                <i className="fa fa-plus"  ></i>
-                            </button>
-
-                        </form>
-
-                    </div>
-                    <div className="card-body m-0" style={{ overflow: "scroll" }}>
-                        <ul className="m-0 p-0" >
-                            <li className="list-unstyled" id="dragcard" >
-
-                                {
-                                    searchResult ?
-                                        fuzzy.search(searchResult).map((res) => (
-
-                                            <div key={res.key} id={res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
-                                                onDragStart={drag}
-                                            >
-                                                <div className='d-flex felx-row align-items-baseline '>
-                                                    <label className='h6'>Name: </label>
-                                                    <p id={res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
-                                                    <span className='flex-grow-1'></span>
-                                                    <p className='m-0 small text-secondary'>Id: {res.key}</p>
-                                                </div>
-
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Designation: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
-                                                </div>
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Team: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
-                                                </div>
-
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Reporting to: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
-                                                </div>
-
-                                            </div>
-
-
-                                        ))
-                                        :
-                                        res.map((res) => (
-
-                                            <div key={res.key} id={res.key} className="card p-2 my-2 " draggable style={{ width: 290 + "px", cursor: "grab" }}
-                                                onDragStart={drag}
-                                            >
-                                                <div className='d-flex felx-row align-items-baseline '>
-                                                    <label className='h6'>Name: </label>
-                                                    <p id={res.key} className="m-0 h6 p-1 name" onDoubleClick={handleNameChangeApi}> {res.name}</p>
-                                                    <span className='flex-grow-1'></span>
-                                                    <p className='m-0 small text-secondary'>Id: {res.key}</p>
-                                                </div>
-
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Designation: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small designation">{res.designation}</p>
-                                                </div>
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Team: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small team">{res.team}</p>
-                                                </div>
-
-                                                <div className='d-flex felx-row align-items-baseline text-secondary'>
-                                                    <label className='small'>Reporting to: </label>
-                                                    <p id={res.key} onDoubleClick={handleNameChangeApi} className="m-0 h6 p-1 small manager">{res.parent}</p>
-                                                </div>
-
-                                            </div>
-
-
-                                        ))}
-                            </li>   
-                            <li className="list-unstyled d-none" id="formCard">
-                                <div className="card p-2 my-2 " style={{ width: 290 + "px" }}>
-                                    <div className='d-flex felx-row align-items-baseline justify-content-between px-1'>
-                                        <label className='h6'>Name: </label>
-                                        <input className="form-control form-control-sm w-50 my-1" 
-                                        onChange={(e) => setName(e.target.value)}
-                                        value={name}
-                                        />
-                                    </div>
-
-                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
-                                        <label className='small'>Designation: </label>
-                                        <input className="form-control form-control-sm  w-50 my-1" 
-                                        onChange={(e) => setDesignation(e.target.value)}
-                                        value={designation}
-                                        />
-                                    </div>
-                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
-                                        <label className='small'>Team: </label>
-                                        <input className="form-control form-control-sm  w-50 my-1"
-                                        onChange={(e) => setTeam(e.target.value)}
-                                        value={team}
-                                        />
-                                    </div>
-
-                                    <div className='d-flex felx-row align-items-baseline text-secondary justify-content-between px-1'>
-                                        <label className='small'>Reporting to: </label>
-                                        <input className="form-control form-control-sm  w-50 my-1" type='number'
-                                        onChange={(e) => setParent(e.target.value)}
-                                        value={parent}
-                                        />
-                                    </div>
-
-                                    <div className='px-1'>
-                                        <button className='btn btn-sm btn-outline-dark p-0 px-1 mt-3' style={{float:"right"}} onClick={addNew}>Add</button>
-                                    </div>
-
-                                </div>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-            </div>
-            <RightPanel id={id} />
-        </div>
+        <></>
     );
-}
+};
 
 export default Tree;
