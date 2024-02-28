@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import go from 'gojs';
 
+
 const Landing = () => {
+
+
+
     useEffect(() => {
 
         let $ = go.GraphObject.make;
@@ -39,22 +43,38 @@ const Landing = () => {
         }
 
         function textStyle() {
-            return { font: "10pt  Segoe UI,sans-serif", stroke: "black" , textAlign: "center",margin: 5
-        };
+            return {
+                font: "10pt  Segoe UI,sans-serif", stroke: "black", textAlign: "center", margin: 5
+            };
         }
 
 
+
+        let res = [];
+
         let model = $(go.TreeModel);
+
         fetch('api/employees')
             .then(response => response.json())
             .then(data => {
-                model.nodeDataArray = data;
+                res = data;
             })
             .catch(error => console.error('Error:', error));
 
         myDiagram.model = model;
 
 
+
+        document.addEventListener("drop", function (event) {
+            var id = event.dataTransfer.getData("text");
+
+            res.filter((item) => {
+                if (item.id === id) {
+                    let newemp = { key: id, name: item.name, parent: item.parent, team: item.team, designation: item.designation };
+                    myDiagram.model.addNodeData(newemp);
+                }
+            });
+        });
 
         myDiagram.nodeTemplate =
             $(go.Node, "Spot",
@@ -69,7 +89,7 @@ const Landing = () => {
                         const shape = node.findObject("SHAPE");
                         if (shape) {
                             shape._prevFill = shape.fill;
-                            shape.fill = "darkred";
+                            shape.fill = "green";
                         }
                     },
                     mouseDragLeave: (e, node, next) => {
@@ -96,50 +116,60 @@ const Landing = () => {
                 new go.Binding("layerName", "isSelected", sel => sel ? "Foreground" : "").ofObject(),
                 $(go.Panel, "Auto",
                     { name: "BODY" },
-                    $(go.Shape, "Rectangle",
-                        { name: "SHAPE", fill: "white", stroke: 'white', strokeWidth: 3.5, portId: "" }),
+                    $(go.Shape, "RoundedRectangle",
+                        { name: "SHAPE", fill: "white", stroke: 'white', strokeWidth: 5, portId: "" }),
                     $(go.Panel, "Horizontal",
 
 
                         $(go.Panel, "Table",
                             {
-                                minSize: new go.Size(180, NaN),
-                                maxSize: new go.Size(180, NaN),
-                                margin: new go.Margin(0, 10, 0, 0),
+                                minSize: new go.Size(290, 113),
+                                maxSize: new go.Size(290, 113),
+                                margin: new go.Margin(0, 0, 0, 0),
                                 defaultAlignment: go.Spot.Left
                             },
-                            $(go.RowColumnDefinition, { column: 2, width: 6 }),
+                            $(go.RowColumnDefinition, { column: 2, width: 2 }),
+
 
                             $(go.TextBlock, textStyle(),
                                 new go.Binding("text", "name").makeTwoWay(),
-                                {font: "bold 12pt Segoe UI,sans-serif"}
+                                { font: "bold 12pt Segoe UI,sans-serif" }
                             ),
 
                             $(go.TextBlock, textStyle(),
                                 new go.Binding("text", "key").makeTwoWay(),
-                                { row: 0, column: 1 }
+                                { row: 0, column: 3 }
                             ),
 
 
+                            $(go.TextBlock, "Designation:", textStyle(),
+                            { row: 1, column: 0 }
+                            ),
 
                             $(go.TextBlock, textStyle(),
                                 new go.Binding("text", "designation").makeTwoWay(),
-                                { row: 1, column: 0 }
+                                { row: 1, column: 1 }
                             ),
 
+
+                            $(go.TextBlock, "Team:", textStyle(),
+                            { row: 2, column: 0 }
+                            ),
+                            
                             $(go.TextBlock, textStyle(),
                                 new go.Binding("text", "team").makeTwoWay(),
-                                { row: 2, column: 0 }
+                                { row: 2, column: 1 }
                             ),
 
+
                             $(go.TextBlock, "Reporting to: ", textStyle(),
-                                {row: 3, column: 0 }
+                                { row: 3, column: 0 }
                             ),
 
                             $(go.TextBlock, textStyle(),
                                 new go.Binding("text", "parent").makeTwoWay(),
                                 { row: 3, column: 1 }
-                            ),       
+                            ),
 
                         )
                     )
@@ -153,7 +183,7 @@ const Landing = () => {
 
                     new go.Binding("opacity", "isSelected", s => s ? 1 : 0).ofObject()
                 ),
-                new go.Binding("isTreeExpanded").makeTwoWay(),
+                new go.Binding("isTreeExpan`ded").makeTwoWay(),
                 $("TreeExpanderButton",
                     {
                         name: "BUTTONX", alignment: go.Spot.Bottom, opacity: 0,
@@ -164,13 +194,11 @@ const Landing = () => {
                 )
             );
 
-
-
         function addEmployee(node) {
             if (!node) return;
             const thisemp = node.data;
             myDiagram.startTransaction("add employee");
-            const newemp = { name: "(new person)", parent: thisemp.id };
+            const newemp = { key: thisemp.id,  name: "(new person)", parent: thisemp.key, team: thisemp.team, designation: thisemp.designation };
             myDiagram.model.addNodeData(newemp);
             const newnode = myDiagram.findNodeForData(newemp);
             if (newnode) newnode.location = node.location;
@@ -187,7 +215,7 @@ const Landing = () => {
 
 
     return (
-            <></>
+        <></>
     );
 };
 

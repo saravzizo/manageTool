@@ -66,31 +66,13 @@ export function makeServer() {
             }
             return res;
         });
-        
-        server.get("/employees/CEO", (schema, request) => {
-            let res =[]
-            res = schema.db.employees.where({designation: "CEO"});
+
+        server.post("/newEmployee", (schema, request) => {
+            let attrs = JSON.parse(request.requestBody);
+            console.log(attrs)
+            let res = schema.db.employees.insert(attrs);
             return res;
         });
-
-        server.get("/employees/Manager", (schema, request) => {
-            let res =[]
-            res = schema.db.employees.where({designation: "Manager"});
-            return res;
-        });
-
-        server.get("/employees/Developer", (schema, request) => {
-            let res =[]
-            res = schema.db.employees.where({designation: "Developer"});
-            return res;
-        });
-
-        server.get("/employees/Tester", (schema, request) => {
-            let res =[]
-            res = schema.db.employees.where({designation: "Tester"});
-            return res;
-        });
-
 
         // patch request for updating employee
 
