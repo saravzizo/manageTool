@@ -17,12 +17,18 @@ Tech stacks used:
   React, 
   Go.js.
 
+![Screenshot 2024-02-29 at 11 28 40 AM](https://github.com/saravzizo/manageTool/assets/106132207/da84688a-5257-462f-8abb-9a9b26624e12)
+![Screenshot 2024-02-29 at 11 29 22 AM](https://github.com/saravzizo/manageTool/assets/106132207/af9341de-2374-4df9-9964-8dec7e7262d8)
 
-![Screenshot 2024-02-29 at 11 22 58 AM](https://github.com/saravzizo/manageTool/assets/106132207/936498c6-2487-4fe2-a027-55f234cac49b)
-![Screenshot 2024-02-29 at 11 23 25 AM](https://github.com/saravzizo/manageTool/assets/106132207/161f44ab-28c6-41ca-8ab1-48fa7e899d78)
 
 
-![Screenshot 2024-02-29 at 11 22 14 AM](https://github.com/saravzizo/manageTool/assets/106132207/fdc8b3ae-1dda-44d9-a91a-bb1bdf34d550)
-![Screenshot 2024-02-29 at 11 23 02 AM](https://github.com/saravzizo/manageTool/assets/106132207/7b9dcfe9-5c89-4983-8ee6-31d77611e0ef)
-![Screenshot 2024-02-29 at 11 23 05 AM](https://github.com/saravzizo/manageTool/assets/106132207/14e840b9-f2e2-410e-b883-8c1be20d0687)
+![Screenshot 2024-02-29 at 11 29 20 AM](https://github.com/saravzizo/manageTool/assets/106132207/cd00fb2b-0530-497c-a708-b97aeffe7178)
+
+![Screenshot 2024-02-29 at 11 29 08 AM](https://github.com/saravzizo/manageTool/assets/106132207/34a23b06-53ed-40d7-9b96-9833d299c868)
+
+![Screenshot 2024-02-29 at 11 28 09 AM](https://github.com/saravzizo/manageTool/assets/106132207/9fdd568e-8da9-41d0-bd24-54b9dbe996b9)
+
+![Screenshot 2024-02-29 at 11 28 56 AM](https://github.com/saravzizo/manageTool/assets/106132207/6c222137-1c61-45c0-997b-18db4d53abac)
+
+
 
