@@ -24,11 +24,8 @@ Tech stacks used:
 
 ![Screenshot 2024-02-29 at 11 29 20 AM](https://github.com/saravzizo/manageTool/assets/106132207/cd00fb2b-0530-497c-a708-b97aeffe7178)
 
-![Screenshot 2024-02-29 at 11 29 08 AM](https://github.com/saravzizo/manageTool/assets/106132207/34a23b06-53ed-40d7-9b96-9833d299c868)
+![Screenshot 2024-02-29 at 11 29 22 AM](https://github.com/saravzizo/manageTool/assets/106132207/72077c30-e3a9-4fb5-b502-3a8951bc6a7a)
 
-![Screenshot 2024-02-29 at 11 28 09 AM](https://github.com/saravzizo/manageTool/assets/106132207/9fdd568e-8da9-41d0-bd24-54b9dbe996b9)
-
-![Screenshot 2024-02-29 at 11 28 56 AM](https://github.com/saravzizo/manageTool/assets/106132207/6c222137-1c61-45c0-997b-18db4d53abac)
 
 
 
