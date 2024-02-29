@@ -18,7 +18,10 @@ Tech stacks used:
   Go.js.
 
 ![Screenshot 2024-02-29 at 11 28 40 AM](https://github.com/saravzizo/manageTool/assets/106132207/da84688a-5257-462f-8abb-9a9b26624e12)
-![Screenshot 2024-02-29 at 11 29 22 AM](https://github.com/saravzizo/manageTool/assets/106132207/af9341de-2374-4df9-9964-8dec7e7262d8)
+
+![Screenshot 2024-02-29 at 11 28 56 AM](https://github.com/saravzizo/manageTool/assets/106132207/e36f64d9-02d6-4044-8cd5-31a6c97587f3)
+
+
 
 
 
