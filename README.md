@@ -1,10 +1,6 @@
-visualize and
-update an employee organization chart
-interactively with filtering and drag & drop
-functionality.
+# visualize and update an employee organization chart interactively with filtering and drag & drop functionality.
 
 
-# A small React Application with Go.js
 
 Steps to Run
 
@@ -13,3 +9,10 @@ Steps to Run
 3. npm start
 
 
+Tech stacks used:
+
+Html and Css
+Bootstrap
+Tippy.js
+React
+Go.js
