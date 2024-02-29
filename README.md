@@ -11,8 +11,8 @@ Steps to Run
 
 Tech stacks used:
 
-  Html and Css
-  Bootstrap
-  Tippy.js
-  React
-  Go.js
+  Html and Css,
+  Bootstrap, 
+  Tippy.js, 
+  React, 
+  Go.js.
