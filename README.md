@@ -9,11 +9,11 @@ Steps to Run
 3. npm start
 
 
-Tech stacks used:
+Techstacks used:
 
   Html and Css,
   Bootstrap, 
-  Tippy.js, 
+  Mirage.js, 
   React, 
   Go.js.
 
